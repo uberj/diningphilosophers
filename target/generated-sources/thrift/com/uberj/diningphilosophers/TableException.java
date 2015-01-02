@@ -33,22 +33,22 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Fork implements org.apache.thrift.TBase<Fork, Fork._Fields>, java.io.Serializable, Cloneable, Comparable<Fork> {
-  private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("Fork");
+public class TableException extends TException implements org.apache.thrift.TBase<TableException, TableException._Fields>, java.io.Serializable, Cloneable, Comparable<TableException> {
+  private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("TableException");
 
-  private static final org.apache.thrift.protocol.TField TABLE_POSITION_FIELD_DESC = new org.apache.thrift.protocol.TField("tablePosition", org.apache.thrift.protocol.TType.I32, (short)1);
+  private static final org.apache.thrift.protocol.TField MESSAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("message", org.apache.thrift.protocol.TType.STRING, (short)1);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
-    schemes.put(StandardScheme.class, new ForkStandardSchemeFactory());
-    schemes.put(TupleScheme.class, new ForkTupleSchemeFactory());
+    schemes.put(StandardScheme.class, new TableExceptionStandardSchemeFactory());
+    schemes.put(TupleScheme.class, new TableExceptionTupleSchemeFactory());
   }
 
-  public int tablePosition; // required
+  public String message; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-    TABLE_POSITION((short)1, "tablePosition");
+    MESSAGE((short)1, "message");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -63,8 +63,8 @@ public class Fork implements org.apache.thrift.TBase<Fork, Fork._Fields>, java.i
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // TABLE_POSITION
-          return TABLE_POSITION;
+        case 1: // MESSAGE
+          return MESSAGE;
         default:
           return null;
       }
@@ -105,76 +105,74 @@ public class Fork implements org.apache.thrift.TBase<Fork, Fork._Fields>, java.i
   }
 
   // isset id assignments
-  private static final int __TABLEPOSITION_ISSET_ID = 0;
-  private byte __isset_bitfield = 0;
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.TABLE_POSITION, new org.apache.thrift.meta_data.FieldMetaData("tablePosition", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
+    tmpMap.put(_Fields.MESSAGE, new org.apache.thrift.meta_data.FieldMetaData("message", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Fork.class, metaDataMap);
+    org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(TableException.class, metaDataMap);
   }
 
-  public Fork() {
+  public TableException() {
   }
 
-  public Fork(
-    int tablePosition)
+  public TableException(
+    String message)
   {
     this();
-    this.tablePosition = tablePosition;
-    setTablePositionIsSet(true);
+    this.message = message;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public Fork(Fork other) {
-    __isset_bitfield = other.__isset_bitfield;
-    this.tablePosition = other.tablePosition;
+  public TableException(TableException other) {
+    if (other.isSetMessage()) {
+      this.message = other.message;
+    }
   }
 
-  public Fork deepCopy() {
-    return new Fork(this);
+  public TableException deepCopy() {
+    return new TableException(this);
   }
 
   @Override
   public void clear() {
-    setTablePositionIsSet(false);
-    this.tablePosition = 0;
+    this.message = null;
   }
 
-  public int getTablePosition() {
-    return this.tablePosition;
+  public String getMessage() {
+    return this.message;
   }
 
-  public Fork setTablePosition(int tablePosition) {
-    this.tablePosition = tablePosition;
-    setTablePositionIsSet(true);
+  public TableException setMessage(String message) {
+    this.message = message;
     return this;
   }
 
-  public void unsetTablePosition() {
-    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __TABLEPOSITION_ISSET_ID);
+  public void unsetMessage() {
+    this.message = null;
   }
 
-  /** Returns true if field tablePosition is set (has been assigned a value) and false otherwise */
-  public boolean isSetTablePosition() {
-    return EncodingUtils.testBit(__isset_bitfield, __TABLEPOSITION_ISSET_ID);
+  /** Returns true if field message is set (has been assigned a value) and false otherwise */
+  public boolean isSetMessage() {
+    return this.message != null;
   }
 
-  public void setTablePositionIsSet(boolean value) {
-    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __TABLEPOSITION_ISSET_ID, value);
+  public void setMessageIsSet(boolean value) {
+    if (!value) {
+      this.message = null;
+    }
   }
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case TABLE_POSITION:
+    case MESSAGE:
       if (value == null) {
-        unsetTablePosition();
+        unsetMessage();
       } else {
-        setTablePosition((Integer)value);
+        setMessage((String)value);
       }
       break;
 
@@ -183,8 +181,8 @@ public class Fork implements org.apache.thrift.TBase<Fork, Fork._Fields>, java.i
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case TABLE_POSITION:
-      return Integer.valueOf(getTablePosition());
+    case MESSAGE:
+      return getMessage();
 
     }
     throw new IllegalStateException();
@@ -197,8 +195,8 @@ public class Fork implements org.apache.thrift.TBase<Fork, Fork._Fields>, java.i
     }
 
     switch (field) {
-    case TABLE_POSITION:
-      return isSetTablePosition();
+    case MESSAGE:
+      return isSetMessage();
     }
     throw new IllegalStateException();
   }
@@ -207,21 +205,21 @@ public class Fork implements org.apache.thrift.TBase<Fork, Fork._Fields>, java.i
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof Fork)
-      return this.equals((Fork)that);
+    if (that instanceof TableException)
+      return this.equals((TableException)that);
     return false;
   }
 
-  public boolean equals(Fork that) {
+  public boolean equals(TableException that) {
     if (that == null)
       return false;
 
-    boolean this_present_tablePosition = true;
-    boolean that_present_tablePosition = true;
-    if (this_present_tablePosition || that_present_tablePosition) {
-      if (!(this_present_tablePosition && that_present_tablePosition))
+    boolean this_present_message = true && this.isSetMessage();
+    boolean that_present_message = true && that.isSetMessage();
+    if (this_present_message || that_present_message) {
+      if (!(this_present_message && that_present_message))
         return false;
-      if (this.tablePosition != that.tablePosition)
+      if (!this.message.equals(that.message))
         return false;
     }
 
@@ -232,28 +230,28 @@ public class Fork implements org.apache.thrift.TBase<Fork, Fork._Fields>, java.i
   public int hashCode() {
     HashCodeBuilder builder = new HashCodeBuilder();
 
-    boolean present_tablePosition = true;
-    builder.append(present_tablePosition);
-    if (present_tablePosition)
-      builder.append(tablePosition);
+    boolean present_message = true && (isSetMessage());
+    builder.append(present_message);
+    if (present_message)
+      builder.append(message);
 
     return builder.toHashCode();
   }
 
   @Override
-  public int compareTo(Fork other) {
+  public int compareTo(TableException other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
 
-    lastComparison = Boolean.valueOf(isSetTablePosition()).compareTo(other.isSetTablePosition());
+    lastComparison = Boolean.valueOf(isSetMessage()).compareTo(other.isSetMessage());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetTablePosition()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.tablePosition, other.tablePosition);
+    if (isSetMessage()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.message, other.message);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -275,11 +273,15 @@ public class Fork implements org.apache.thrift.TBase<Fork, Fork._Fields>, java.i
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("Fork(");
+    StringBuilder sb = new StringBuilder("TableException(");
     boolean first = true;
 
-    sb.append("tablePosition:");
-    sb.append(this.tablePosition);
+    sb.append("message:");
+    if (this.message == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.message);
+    }
     first = false;
     sb.append(")");
     return sb.toString();
@@ -300,23 +302,21 @@ public class Fork implements org.apache.thrift.TBase<Fork, Fork._Fields>, java.i
 
   private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
     try {
-      // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
-      __isset_bitfield = 0;
       read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
     } catch (org.apache.thrift.TException te) {
       throw new java.io.IOException(te);
     }
   }
 
-  private static class ForkStandardSchemeFactory implements SchemeFactory {
-    public ForkStandardScheme getScheme() {
-      return new ForkStandardScheme();
+  private static class TableExceptionStandardSchemeFactory implements SchemeFactory {
+    public TableExceptionStandardScheme getScheme() {
+      return new TableExceptionStandardScheme();
     }
   }
 
-  private static class ForkStandardScheme extends StandardScheme<Fork> {
+  private static class TableExceptionStandardScheme extends StandardScheme<TableException> {
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot, Fork struct) throws org.apache.thrift.TException {
+    public void read(org.apache.thrift.protocol.TProtocol iprot, TableException struct) throws org.apache.thrift.TException {
       org.apache.thrift.protocol.TField schemeField;
       iprot.readStructBegin();
       while (true)
@@ -326,10 +326,10 @@ public class Fork implements org.apache.thrift.TBase<Fork, Fork._Fields>, java.i
           break;
         }
         switch (schemeField.id) {
-          case 1: // TABLE_POSITION
-            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-              struct.tablePosition = iprot.readI32();
-              struct.setTablePositionIsSet(true);
+          case 1: // MESSAGE
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.message = iprot.readString();
+              struct.setMessageIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -345,47 +345,49 @@ public class Fork implements org.apache.thrift.TBase<Fork, Fork._Fields>, java.i
       struct.validate();
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot, Fork struct) throws org.apache.thrift.TException {
+    public void write(org.apache.thrift.protocol.TProtocol oprot, TableException struct) throws org.apache.thrift.TException {
       struct.validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
-      oprot.writeFieldBegin(TABLE_POSITION_FIELD_DESC);
-      oprot.writeI32(struct.tablePosition);
-      oprot.writeFieldEnd();
+      if (struct.message != null) {
+        oprot.writeFieldBegin(MESSAGE_FIELD_DESC);
+        oprot.writeString(struct.message);
+        oprot.writeFieldEnd();
+      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
 
   }
 
-  private static class ForkTupleSchemeFactory implements SchemeFactory {
-    public ForkTupleScheme getScheme() {
-      return new ForkTupleScheme();
+  private static class TableExceptionTupleSchemeFactory implements SchemeFactory {
+    public TableExceptionTupleScheme getScheme() {
+      return new TableExceptionTupleScheme();
     }
   }
 
-  private static class ForkTupleScheme extends TupleScheme<Fork> {
+  private static class TableExceptionTupleScheme extends TupleScheme<TableException> {
 
     @Override
-    public void write(org.apache.thrift.protocol.TProtocol prot, Fork struct) throws org.apache.thrift.TException {
+    public void write(org.apache.thrift.protocol.TProtocol prot, TableException struct) throws org.apache.thrift.TException {
       TTupleProtocol oprot = (TTupleProtocol) prot;
       BitSet optionals = new BitSet();
-      if (struct.isSetTablePosition()) {
+      if (struct.isSetMessage()) {
         optionals.set(0);
       }
       oprot.writeBitSet(optionals, 1);
-      if (struct.isSetTablePosition()) {
-        oprot.writeI32(struct.tablePosition);
+      if (struct.isSetMessage()) {
+        oprot.writeString(struct.message);
       }
     }
 
     @Override
-    public void read(org.apache.thrift.protocol.TProtocol prot, Fork struct) throws org.apache.thrift.TException {
+    public void read(org.apache.thrift.protocol.TProtocol prot, TableException struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
       BitSet incoming = iprot.readBitSet(1);
       if (incoming.get(0)) {
-        struct.tablePosition = iprot.readI32();
-        struct.setTablePositionIsSet(true);
+        struct.message = iprot.readString();
+        struct.setMessageIsSet(true);
       }
     }
   }

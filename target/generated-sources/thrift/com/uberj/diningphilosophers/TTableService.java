@@ -37,9 +37,9 @@ public class TTableService {
 
   public interface Iface {
 
-    public boolean pickUpFork(Fork fork) throws org.apache.thrift.TException;
+    public boolean pickUpFork(Fork fork) throws TableException, org.apache.thrift.TException;
 
-    public boolean setDownFork(Fork fork) throws org.apache.thrift.TException;
+    public boolean setDownFork(Fork fork) throws TableException, org.apache.thrift.TException;
 
     public boolean foo() throws org.apache.thrift.TException;
 
@@ -75,7 +75,7 @@ public class TTableService {
       super(iprot, oprot);
     }
 
-    public boolean pickUpFork(Fork fork) throws org.apache.thrift.TException
+    public boolean pickUpFork(Fork fork) throws TableException, org.apache.thrift.TException
     {
       send_pickUpFork(fork);
       return recv_pickUpFork();
@@ -88,17 +88,20 @@ public class TTableService {
       sendBase("pickUpFork", args);
     }
 
-    public boolean recv_pickUpFork() throws org.apache.thrift.TException
+    public boolean recv_pickUpFork() throws TableException, org.apache.thrift.TException
     {
       pickUpFork_result result = new pickUpFork_result();
       receiveBase(result, "pickUpFork");
       if (result.isSetSuccess()) {
         return result.success;
       }
+      if (result.e != null) {
+        throw result.e;
+      }
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "pickUpFork failed: unknown result");
     }
 
-    public boolean setDownFork(Fork fork) throws org.apache.thrift.TException
+    public boolean setDownFork(Fork fork) throws TableException, org.apache.thrift.TException
     {
       send_setDownFork(fork);
       return recv_setDownFork();
@@ -111,12 +114,15 @@ public class TTableService {
       sendBase("setDownFork", args);
     }
 
-    public boolean recv_setDownFork() throws org.apache.thrift.TException
+    public boolean recv_setDownFork() throws TableException, org.apache.thrift.TException
     {
       setDownFork_result result = new setDownFork_result();
       receiveBase(result, "setDownFork");
       if (result.isSetSuccess()) {
         return result.success;
+      }
+      if (result.e != null) {
+        throw result.e;
       }
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "setDownFork failed: unknown result");
     }
@@ -183,7 +189,7 @@ public class TTableService {
         prot.writeMessageEnd();
       }
 
-      public boolean getResult() throws org.apache.thrift.TException {
+      public boolean getResult() throws TableException, org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -215,7 +221,7 @@ public class TTableService {
         prot.writeMessageEnd();
       }
 
-      public boolean getResult() throws org.apache.thrift.TException {
+      public boolean getResult() throws TableException, org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -288,8 +294,12 @@ public class TTableService {
 
       public pickUpFork_result getResult(I iface, pickUpFork_args args) throws org.apache.thrift.TException {
         pickUpFork_result result = new pickUpFork_result();
-        result.success = iface.pickUpFork(args.fork);
-        result.setSuccessIsSet(true);
+        try {
+          result.success = iface.pickUpFork(args.fork);
+          result.setSuccessIsSet(true);
+        } catch (TableException e) {
+          result.e = e;
+        }
         return result;
       }
     }
@@ -309,8 +319,12 @@ public class TTableService {
 
       public setDownFork_result getResult(I iface, setDownFork_args args) throws org.apache.thrift.TException {
         setDownFork_result result = new setDownFork_result();
-        result.success = iface.setDownFork(args.fork);
-        result.setSuccessIsSet(true);
+        try {
+          result.success = iface.setDownFork(args.fork);
+          result.setSuccessIsSet(true);
+        } catch (TableException e) {
+          result.e = e;
+        }
         return result;
       }
     }
@@ -383,6 +397,12 @@ public class TTableService {
             byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
             org.apache.thrift.TBase msg;
             pickUpFork_result result = new pickUpFork_result();
+            if (e instanceof TableException) {
+                        result.e = (TableException) e;
+                        result.setEIsSet(true);
+                        msg = result;
+            }
+             else 
             {
               msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
               msg = (org.apache.thrift.TBase)new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
@@ -435,6 +455,12 @@ public class TTableService {
             byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
             org.apache.thrift.TBase msg;
             setDownFork_result result = new setDownFork_result();
+            if (e instanceof TableException) {
+                        result.e = (TableException) e;
+                        result.setEIsSet(true);
+                        msg = result;
+            }
+             else 
             {
               msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
               msg = (org.apache.thrift.TBase)new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
@@ -883,6 +909,7 @@ public class TTableService {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("pickUpFork_result");
 
     private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.BOOL, (short)0);
+    private static final org.apache.thrift.protocol.TField E_FIELD_DESC = new org.apache.thrift.protocol.TField("e", org.apache.thrift.protocol.TType.STRUCT, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -891,10 +918,12 @@ public class TTableService {
     }
 
     public boolean success; // required
+    public TableException e; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      SUCCESS((short)0, "success");
+      SUCCESS((short)0, "success"),
+      E((short)1, "e");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -911,6 +940,8 @@ public class TTableService {
         switch(fieldId) {
           case 0: // SUCCESS
             return SUCCESS;
+          case 1: // E
+            return E;
           default:
             return null;
         }
@@ -958,6 +989,8 @@ public class TTableService {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
+      tmpMap.put(_Fields.E, new org.apache.thrift.meta_data.FieldMetaData("e", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(pickUpFork_result.class, metaDataMap);
     }
@@ -966,11 +999,13 @@ public class TTableService {
     }
 
     public pickUpFork_result(
-      boolean success)
+      boolean success,
+      TableException e)
     {
       this();
       this.success = success;
       setSuccessIsSet(true);
+      this.e = e;
     }
 
     /**
@@ -979,6 +1014,9 @@ public class TTableService {
     public pickUpFork_result(pickUpFork_result other) {
       __isset_bitfield = other.__isset_bitfield;
       this.success = other.success;
+      if (other.isSetE()) {
+        this.e = new TableException(other.e);
+      }
     }
 
     public pickUpFork_result deepCopy() {
@@ -989,6 +1027,7 @@ public class TTableService {
     public void clear() {
       setSuccessIsSet(false);
       this.success = false;
+      this.e = null;
     }
 
     public boolean isSuccess() {
@@ -1014,6 +1053,30 @@ public class TTableService {
       __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __SUCCESS_ISSET_ID, value);
     }
 
+    public TableException getE() {
+      return this.e;
+    }
+
+    public pickUpFork_result setE(TableException e) {
+      this.e = e;
+      return this;
+    }
+
+    public void unsetE() {
+      this.e = null;
+    }
+
+    /** Returns true if field e is set (has been assigned a value) and false otherwise */
+    public boolean isSetE() {
+      return this.e != null;
+    }
+
+    public void setEIsSet(boolean value) {
+      if (!value) {
+        this.e = null;
+      }
+    }
+
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case SUCCESS:
@@ -1024,6 +1087,14 @@ public class TTableService {
         }
         break;
 
+      case E:
+        if (value == null) {
+          unsetE();
+        } else {
+          setE((TableException)value);
+        }
+        break;
+
       }
     }
 
@@ -1031,6 +1102,9 @@ public class TTableService {
       switch (field) {
       case SUCCESS:
         return Boolean.valueOf(isSuccess());
+
+      case E:
+        return getE();
 
       }
       throw new IllegalStateException();
@@ -1045,6 +1119,8 @@ public class TTableService {
       switch (field) {
       case SUCCESS:
         return isSetSuccess();
+      case E:
+        return isSetE();
       }
       throw new IllegalStateException();
     }
@@ -1071,6 +1147,15 @@ public class TTableService {
           return false;
       }
 
+      boolean this_present_e = true && this.isSetE();
+      boolean that_present_e = true && that.isSetE();
+      if (this_present_e || that_present_e) {
+        if (!(this_present_e && that_present_e))
+          return false;
+        if (!this.e.equals(that.e))
+          return false;
+      }
+
       return true;
     }
 
@@ -1082,6 +1167,11 @@ public class TTableService {
       builder.append(present_success);
       if (present_success)
         builder.append(success);
+
+      boolean present_e = true && (isSetE());
+      builder.append(present_e);
+      if (present_e)
+        builder.append(e);
 
       return builder.toHashCode();
     }
@@ -1100,6 +1190,16 @@ public class TTableService {
       }
       if (isSetSuccess()) {
         lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, other.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetE()).compareTo(other.isSetE());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetE()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.e, other.e);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -1126,6 +1226,14 @@ public class TTableService {
 
       sb.append("success:");
       sb.append(this.success);
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("e:");
+      if (this.e == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.e);
+      }
       first = false;
       sb.append(")");
       return sb.toString();
@@ -1180,6 +1288,15 @@ public class TTableService {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
+            case 1: // E
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.e = new TableException();
+                struct.e.read(iprot);
+                struct.setEIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -1198,6 +1315,11 @@ public class TTableService {
         if (struct.isSetSuccess()) {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           oprot.writeBool(struct.success);
+          oprot.writeFieldEnd();
+        }
+        if (struct.e != null) {
+          oprot.writeFieldBegin(E_FIELD_DESC);
+          struct.e.write(oprot);
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -1221,19 +1343,30 @@ public class TTableService {
         if (struct.isSetSuccess()) {
           optionals.set(0);
         }
-        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetE()) {
+          optionals.set(1);
+        }
+        oprot.writeBitSet(optionals, 2);
         if (struct.isSetSuccess()) {
           oprot.writeBool(struct.success);
+        }
+        if (struct.isSetE()) {
+          struct.e.write(oprot);
         }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, pickUpFork_result struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
+        BitSet incoming = iprot.readBitSet(2);
         if (incoming.get(0)) {
           struct.success = iprot.readBool();
           struct.setSuccessIsSet(true);
+        }
+        if (incoming.get(1)) {
+          struct.e = new TableException();
+          struct.e.read(iprot);
+          struct.setEIsSet(true);
         }
       }
     }
@@ -1610,6 +1743,7 @@ public class TTableService {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("setDownFork_result");
 
     private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.BOOL, (short)0);
+    private static final org.apache.thrift.protocol.TField E_FIELD_DESC = new org.apache.thrift.protocol.TField("e", org.apache.thrift.protocol.TType.STRUCT, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -1618,10 +1752,12 @@ public class TTableService {
     }
 
     public boolean success; // required
+    public TableException e; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      SUCCESS((short)0, "success");
+      SUCCESS((short)0, "success"),
+      E((short)1, "e");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -1638,6 +1774,8 @@ public class TTableService {
         switch(fieldId) {
           case 0: // SUCCESS
             return SUCCESS;
+          case 1: // E
+            return E;
           default:
             return null;
         }
@@ -1685,6 +1823,8 @@ public class TTableService {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
+      tmpMap.put(_Fields.E, new org.apache.thrift.meta_data.FieldMetaData("e", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(setDownFork_result.class, metaDataMap);
     }
@@ -1693,11 +1833,13 @@ public class TTableService {
     }
 
     public setDownFork_result(
-      boolean success)
+      boolean success,
+      TableException e)
     {
       this();
       this.success = success;
       setSuccessIsSet(true);
+      this.e = e;
     }
 
     /**
@@ -1706,6 +1848,9 @@ public class TTableService {
     public setDownFork_result(setDownFork_result other) {
       __isset_bitfield = other.__isset_bitfield;
       this.success = other.success;
+      if (other.isSetE()) {
+        this.e = new TableException(other.e);
+      }
     }
 
     public setDownFork_result deepCopy() {
@@ -1716,6 +1861,7 @@ public class TTableService {
     public void clear() {
       setSuccessIsSet(false);
       this.success = false;
+      this.e = null;
     }
 
     public boolean isSuccess() {
@@ -1741,6 +1887,30 @@ public class TTableService {
       __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __SUCCESS_ISSET_ID, value);
     }
 
+    public TableException getE() {
+      return this.e;
+    }
+
+    public setDownFork_result setE(TableException e) {
+      this.e = e;
+      return this;
+    }
+
+    public void unsetE() {
+      this.e = null;
+    }
+
+    /** Returns true if field e is set (has been assigned a value) and false otherwise */
+    public boolean isSetE() {
+      return this.e != null;
+    }
+
+    public void setEIsSet(boolean value) {
+      if (!value) {
+        this.e = null;
+      }
+    }
+
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case SUCCESS:
@@ -1751,6 +1921,14 @@ public class TTableService {
         }
         break;
 
+      case E:
+        if (value == null) {
+          unsetE();
+        } else {
+          setE((TableException)value);
+        }
+        break;
+
       }
     }
 
@@ -1758,6 +1936,9 @@ public class TTableService {
       switch (field) {
       case SUCCESS:
         return Boolean.valueOf(isSuccess());
+
+      case E:
+        return getE();
 
       }
       throw new IllegalStateException();
@@ -1772,6 +1953,8 @@ public class TTableService {
       switch (field) {
       case SUCCESS:
         return isSetSuccess();
+      case E:
+        return isSetE();
       }
       throw new IllegalStateException();
     }
@@ -1798,6 +1981,15 @@ public class TTableService {
           return false;
       }
 
+      boolean this_present_e = true && this.isSetE();
+      boolean that_present_e = true && that.isSetE();
+      if (this_present_e || that_present_e) {
+        if (!(this_present_e && that_present_e))
+          return false;
+        if (!this.e.equals(that.e))
+          return false;
+      }
+
       return true;
     }
 
@@ -1809,6 +2001,11 @@ public class TTableService {
       builder.append(present_success);
       if (present_success)
         builder.append(success);
+
+      boolean present_e = true && (isSetE());
+      builder.append(present_e);
+      if (present_e)
+        builder.append(e);
 
       return builder.toHashCode();
     }
@@ -1827,6 +2024,16 @@ public class TTableService {
       }
       if (isSetSuccess()) {
         lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, other.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetE()).compareTo(other.isSetE());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetE()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.e, other.e);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -1853,6 +2060,14 @@ public class TTableService {
 
       sb.append("success:");
       sb.append(this.success);
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("e:");
+      if (this.e == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.e);
+      }
       first = false;
       sb.append(")");
       return sb.toString();
@@ -1907,6 +2122,15 @@ public class TTableService {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
+            case 1: // E
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.e = new TableException();
+                struct.e.read(iprot);
+                struct.setEIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -1925,6 +2149,11 @@ public class TTableService {
         if (struct.isSetSuccess()) {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           oprot.writeBool(struct.success);
+          oprot.writeFieldEnd();
+        }
+        if (struct.e != null) {
+          oprot.writeFieldBegin(E_FIELD_DESC);
+          struct.e.write(oprot);
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -1948,19 +2177,30 @@ public class TTableService {
         if (struct.isSetSuccess()) {
           optionals.set(0);
         }
-        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetE()) {
+          optionals.set(1);
+        }
+        oprot.writeBitSet(optionals, 2);
         if (struct.isSetSuccess()) {
           oprot.writeBool(struct.success);
+        }
+        if (struct.isSetE()) {
+          struct.e.write(oprot);
         }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, setDownFork_result struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
+        BitSet incoming = iprot.readBitSet(2);
         if (incoming.get(0)) {
           struct.success = iprot.readBool();
           struct.setSuccessIsSet(true);
+        }
+        if (incoming.get(1)) {
+          struct.e = new TableException();
+          struct.e.read(iprot);
+          struct.setEIsSet(true);
         }
       }
     }
